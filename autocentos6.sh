@@ -82,27 +82,27 @@ echo "screenfetch" >> .bash_profile
 
 # install webserver
 cd
-wget -O /etc/nginx/nginx.conf "http://172.245.223.98/centos/nginx.conf"
+wget -O /etc/nginx/nginx.conf "https://rawgit.com/edorock/vps/master/centos/nginx.conf"
 sed -i 's/www-data/nginx/g' /etc/nginx/nginx.conf
 mkdir -p /home/vps/public_html
-echo "<pre>Volcanos VPS  Pin BB : 3227482b  Phone : 085766086968 </pre>" > /home/vps/public_html/index.html
+echo "<pre>Volcanos VPS  Pin BB : 53F639AD  Phone : 085766086968 </pre>" > /home/vps/public_html/index.html
 echo "<?php phpinfo(); ?>" > /home/vps/public_html/info.php
 rm /etc/nginx/conf.d/*
-wget -O /etc/nginx/conf.d/vps.conf "http://172.245.223.98/centos/vps.conf"
+wget -O /etc/nginx/conf.d/vps.conf "https://rawgit.com/edorock/vps/master/centos/vps.conf"
 sed -i 's/apache/nginx/g' /etc/php-fpm.d/www.conf
 chmod -R +rx /home/vps
 service php-fpm restart
 service nginx restart
 
 # install openvpn
-wget -O /etc/openvpn/openvpn.tar "http://172.245.223.98/centos/openvpn-debian.tar"
+wget -O /etc/openvpn/openvpn.tar "https://rawgit.com/edorock/vps/master/centos/openvpn-debian.tar"
 cd /etc/openvpn/
 tar xf openvpn.tar
-wget -O /etc/openvpn/1194.conf "http://172.245.223.98/centos/1194-centos.conf"
+wget -O /etc/openvpn/1194.conf "https://rawgit.com/edorock/vps/master/centos/1194-centos.conf"
 if [ "$OS" == "x86_64" ]; then
-  wget -O /etc/openvpn/1194.conf "http://172.245.223.98/centos/1194-centos64.conf"
+  wget -O /etc/openvpn/1194.conf "https://rawgit.com/edorock/vps/master/centos/1194-centos64.conf"
 fi
-wget -O /etc/iptables.up.rules "http://172.245.223.98/centos/iptables.up.rules"
+wget -O /etc/iptables.up.rules "https://rawgit.com/edorock/vps/master/centos/iptables.up.rules"
 sed -i '$ i\iptables-restore < /etc/iptables.up.rules' /etc/rc.local
 sed -i '$ i\iptables-restore < /etc/iptables.up.rules' /etc/rc.d/rc.local
 sed -i $MYIP2 /etc/iptables.up.rules;
@@ -115,11 +115,11 @@ cd
 
 # configure openvpn client config
 cd /etc/openvpn/
-wget -O /etc/openvpn/1194-client.ovpn "http://172.245.223.98/centos/1194-client.conf"
+wget -O /etc/openvpn/1194-client.ovpn "https://rawgit.com/edorock/vps/master/centos/1194-client.conf"
 sed -i $MYIP2 /etc/openvpn/1194-client.ovpn;
 PASS=`cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 15 | head -n 1`;
 useradd -M -s /bin/false trial
-echo "trial:$PASS" | chpasswd
+echo "ujicoba:$PASS" | chpasswd
 echo "username" > pass.txt
 echo "password" >> pass.txt
 tar cf client.tar 1194-client.ovpn pass.txt
@@ -127,9 +127,9 @@ cp client.tar /home/vps/public_html/
 cd
 
 # install badvpn
-wget -O /usr/bin/badvpn-udpgw "http://172.245.223.98/centos/badvpn-udpgw"
+wget -O /usr/bin/badvpn-udpgw "https://rawgit.com/edorock/vps/master/centos/badvpn-udpgw"
 if [ "$OS" == "x86_64" ]; then
-  wget -O /usr/bin/badvpn-udpgw "http://172.245.223.98/centos/badvpn-udpgw64"
+  wget -O /usr/bin/badvpn-udpgw "https://rawgit.com/edorock/vps/master/centos/badvpn-udpgw64"
 fi
 sed -i '$ i\screen -AmdS badvpn badvpn-udpgw --listen-addr 127.0.0.1:7300' /etc/rc.local
 sed -i '$ i\screen -AmdS badvpn badvpn-udpgw --listen-addr 127.0.0.1:7300' /etc/rc.d/rc.local
@@ -138,8 +138,8 @@ screen -AmdS badvpn badvpn-udpgw --listen-addr 127.0.0.1:7300
 
 # install mrtg
 cd /etc/snmp/
-wget -O /etc/snmp/snmpd.conf "http://172.245.223.98/centos/snmpd.conf"
-wget -O /root/mrtg-mem.sh "http://172.245.223.98/centos/mrtg-mem.sh"
+wget -O /etc/snmp/snmpd.conf "https://rawgit.com/edorock/vps/master/centos/snmpd.conf"
+wget -O /root/mrtg-mem.sh "https://rawgit.com/edorock/vps/master/centos/mrtg-mem.sh"
 chmod +x /root/mrtg-mem.sh
 service snmpd restart
 chkconfig snmpd on
@@ -190,7 +190,7 @@ chkconfig fail2ban on
 
 # install squid
 yum -y install squid
-wget -O /etc/squid/squid.conf "http://172.245.223.98/centos/squid-centos.conf"
+wget -O /etc/squid/squid.conf "https://rawgit.com/edorock/vps/master/centos/squid-centos.conf"
 sed -i $MYIP2 /etc/squid/squid.conf;
 service squid restart
 chkconfig squid on
@@ -205,27 +205,22 @@ chkconfig webmin on
 
 # pasang bmon
 if [ "$OS" == "x86_64" ]; then
-  wget -O /usr/bin/bmon "http://172.245.223.98/centos/bmon64"
+  wget -O /usr/bin/bmon "https://rawgit.com/edorock/vps/master/centos/bmon64"
 else
-  wget -O /usr/bin/bmon "http://172.245.223.98/centos/bmon"
+  wget -O /usr/bin/bmon "https://rawgit.com/edorock/vps/master/centos/bmon"
 fi
 chmod +x /usr/bin/bmon
 
 # downlaod script
 cd
 wget -O speedtest_cli.py "https://raw.github.com/sivel/speedtest-cli/master/speedtest_cli.py"
-wget -O bench-network.sh "http://172.245.223.98/debian/bench-network.sh"
+wget -O bench-network.sh "https://rawgit.com/edorock/vps/master/centos/bench-network.sh"
 wget -O ps_mem.py "https://raw.github.com/pixelb/ps_mem/master/ps_mem.py"
-wget -O limit.sh "http://172.245.223.98/volcanos/limit.sh"
-curl http://172.245.223.98/volcanos/volcanos.sh > volcanos.sh
-curl http://172.245.223.98/volcanos/limit.sh > limit.sh
-sed -i '$ i\screen -AmdS limit /root/limit.sh' /etc/rc.local
-sed -i '$ i\screen -AmdS limit /root/limit.sh' /etc/rc.d/rc.local
+curl https://rawgit.com/edorock/vps/master/volcanos/volcanos.sh > volcanos.sh
 chmod +x bench-network.sh
 chmod +x speedtest_cli.py
 chmod +x ps_mem.py
 chmod +x volcanos.sh
-chmod +x limit.sh
 
 # cron
 service crond start
@@ -251,7 +246,7 @@ chkconfig crond on
 
 # info
 clear
-echo "JualSSH.com | @arieonline | KangArie | 7946F434" | tee log-install.txt
+echo "VPS VOLCANOS | @volcanos | 085766086968 | 53F639AD" | tee log-install.txt
 echo "===============================================" | tee -a log-install.txt
 echo ""  | tee -a log-install.txt
 echo "Service"  | tee -a log-install.txt
@@ -284,7 +279,7 @@ echo "./user-limit.sh 2"  | tee -a log-install.txt
 echo ""  | tee -a log-install.txt
 echo "Account Default (utk SSH dan VPN)"  | tee -a log-install.txt
 echo "---------------"  | tee -a log-install.txt
-echo "User     : trial"  | tee -a log-install.txt
+echo "User     : ujicoba"  | tee -a log-install.txt
 echo "Password : $PASS"  | tee -a log-install.txt
 echo ""  | tee -a log-install.txt
 echo "Fitur lain"  | tee -a log-install.txt
